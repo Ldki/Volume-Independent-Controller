@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      width: 350px;
+      padding: 2px;
+      height: 600px; /* 可以添加高度限制 */
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 10px;
+      color: #2c3e50;
+    }
+    .header h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+    /* 新增：記憶開關樣式 */
+    .memory-toggle-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 10px;
+    }
+    .toggle-label {
+      font-size: 14px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .toggle-slider {
+      background-color: #2196F3;
+    }
+    input:checked + .toggle-slider:before {
+      transform: translateX(26px);
+    }
+    .top-section {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .shortcut-container {
+      background: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+    }
+    .tab-info {
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      font-size: 14px;
+      color: #34495e;
+      flex: 1;
+    }
+    .volume-container {
+      margin-bottom: 10px;
+      background: white;
+      padding: 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .volume-slider-container {
+      position: relative;
+      margin: 12px 0;
+    }
+    .volume-slider {
+      width: 100%;
+      height: 12px;
+      -webkit-appearance: none;
+      background: linear-gradient(to right, #4CAF50, #FFC107, #FF5722);
+      border-radius: 6px;
+      outline: none;
+    }
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #3498db;
+      cursor: pointer;
+      border: 3px solid white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      transition: all 0.2s;
+    }
+    .volume-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.1);
+    }
+    .volume-markers {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 6px;
+      font-size: 10px;
+      color: #7f8c8d;
+    }
+    .volume-display {
+      text-align: center;
+      font-size: 18px;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    .volume-warning {
+      color: #e74c3c;
+      font-size: 12px;
+      text-align: center;
+      font-weight: bold;
+      margin-top: 5px;
+    }
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      gap: 4px;
+    }
+    button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s;
+      flex: 1;
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .mute-btn {
+      background-color: #e74c3c;
+      color: white;
+    }
+    .mute-btn.active {
+      background-color: #2ecc71;
+    }
+    .reset-btn {
+      background-color: #3498db;
+      color: white;
+    }
+    .import-export {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 10px;
+    }
+    .import-export button {
+      flex: 1;
+    }
+    .export-btn {
+      background-color: #9b59b6;
+      color: white;
+    }
+    .import-btn {
+      background-color: #1abc9c;
+      color: white;
+    }
+    .shortcut-button {
+      background-color: #f39c12;
+      color: white;
+      padding: 6px 10px;
+      font-size: 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+    .settings-management {
+      background: white;
+      padding: 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .settings-title {
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #2c3e50;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .settings-list {
+      max-height: 137px;
+      overflow-y: auto;
+      border: 1px solid #eee;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+	.setting-item {
+	  padding: 4px 8px;
+	  border-bottom: 1px solid #f0f0f0;
+	  display: flex;
+	  align-items: center;
+	  min-height: 15px;
+	}
+    .setting-item:last-child {
+      border-bottom: none;
+    }
+    .setting-item input[type="checkbox"] {
+      margin-right: 8px;
+      margin-top: 2px;
+    }
+    .setting-url {
+      flex: 1;
+      font-size: 12px;
+      color: #555;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      line-height: 1.3;
+    }
+    .setting-time {
+      font-size: 10px;
+      color: #888;
+      margin-top: 1px;
+    }
+    .setting-volume {
+      font-size: 11px;
+      background: #ecf0f1;
+      padding: 2px 6px;
+      border-radius: 3px;
+      margin-left: 8px;
+      white-space: nowrap;
+    }
+    .settings-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .settings-actions button {
+      flex: 1;
+    }
+    .select-all-btn {
+      background-color: #3498db;
+      color: white;
+    }
+    .delete-selected-btn {
+      background-color: #e74c3c;
+      color: white;
+    }
+    .empty-settings {
+      text-align: center;
+      color: #7f8c8d;
+      font-style: italic;
+      padding: 15px;
+      font-size: 12px;
+    }
+    .file-input {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h3></h3>
+  </div>
+  
+  <!-- 新增：記憶開關 -->
+  <div class="memory-toggle-container">
+    <span class="toggle-label">記憶音量設定</span>
+    <label class="toggle-switch">
+      <input type="checkbox" id="memory-toggle">
+      <span class="toggle-slider"></span>
+    </label>
+  </div>
+  
+  <div class="top-section">
+    <div class="shortcut-container">
+      <button id="change-shortcuts" class="shortcut-button">更改快捷鍵</button>
+    </div>
+    <div class="tab-info">
+      當前控制分頁: <span id="tab-title">載入中...</span>
+    </div>
+  </div>
+  
+  <div class="volume-container">
+    <div class="volume-display">音量: <span id="volume-value">100%</span></div>
+    <div class="volume-slider-container">
+      <input type="range" min="0" max="600" value="100" class="volume-slider" id="volume-slider">
+      <div class="volume-markers">
+        <span>0%</span>
+        <span>100%</span>
+        <span>200%</span>
+        <span>300%</span>
+        <span>400%</span>
+        <span>500%</span>
+        <span>600%</span>
+      </div>
+    </div>
+    <div class="volume-warning" id="volume-warning">高音量可能影響音質</div>
+  </div>
+  
+  <div class="buttons">
+    <button id="mute-btn" class="mute-btn">静音</button>
+    <button id="reset-btn" class="reset-btn">重置</button>
+  </div>
+  
+  <div class="import-export">
+    <button id="export-btn" class="export-btn">匯出設定</button>
+    <button id="import-btn" class="import-btn">匯入設定</button>
+    <input type="file" id="import-file" class="file-input" accept=".json">
+  </div>
+  
+  <div class="settings-management">
+    <div class="settings-title">
+      <span>已記憶的音量設定</span>
+      <span id="settings-count">(0)</span>
+    </div>
+    <div class="settings-list" id="settings-list">
+      <div class="empty-settings">尚未記憶任何網站的音量設定</div>
+    </div>
+    <div class="settings-actions">
+      <button id="select-all-btn" class="select-all-btn">全選</button>
+      <button id="delete-selected-btn" class="delete-selected-btn">刪除選取項目</button>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
