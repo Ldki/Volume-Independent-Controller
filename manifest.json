@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "分頁音量控制器",
-  "version": "2.9.0",
+  "version": "2.9.1",
   "description": "控制當前分頁的音量，支持最高600%音量，帶有視頻獨立記憶和設定管理功能",
   "permissions": [
     "activeTab",
