@@ -106,6 +106,7 @@
     .volume-slider-container {
       position: relative;
       margin: 12px 0;
+      margin-left: -5px;  /* 滑塊向左移動8px */
     }
     .volume-slider {
       width: 100%;
@@ -320,13 +321,13 @@
     <div class="volume-slider-container">
       <input type="range" min="0" max="600" value="100" class="volume-slider" id="volume-slider">
       <div class="volume-markers">
-        <span>0%</span>
-        <span>100%</span>
-        <span>200%</span>
-        <span>300%</span>
-        <span>400%</span>
-        <span>500%</span>
-        <span>600%</span>
+        <span style="margin-left: 10px">0%</span>  <!-- 0%向右移動10px -->
+        <span style="margin-left: 6px">100%</span>  <!-- 0%向右移動6px -->
+        <span style="margin-left: 3px">200%</span>  <!-- 0%向右移動3px -->
+        <span style="margin-left: 2px">300%</span>  <!-- 0%向右移動2px -->
+        <span style="margin-left: 4px">400%</span>  <!-- 0%向右移動4px -->
+        <span style="margin-left: 1px">500%</span>  <!-- 0%向右移動1px -->
+        <span style="margin-left: 0px">600%</span>  <!-- 600%向右移動0px -->
       </div>
     </div>
     <div class="volume-warning" id="volume-warning">高音量可能影響音質</div>
